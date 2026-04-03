@@ -197,9 +197,9 @@ function CardWrap({
           style={[styles.card, { backgroundColor: pal.bg, borderColor: isSel ? "#818cf8" : pal.border }]}
           onClick={handleWebClick}
         >
-          {card.type === "note"      && <CardNote      card={card} isEdit={isEdit} onUpdate={onUpdate} onBlur={onStopEdit} />}
-          {card.type === "checklist" && <CardChecklist card={card} isEdit={isEdit} onUpdate={onUpdate} onBlur={onStopEdit} />}
-          {card.type === "image"     && <CardImage     card={card} isEdit={isEdit} isSel={isSel} onUpdate={onUpdate} onBlur={onStopEdit} />}
+          {card.type === "note"      && <CardNote      card={card} fg={pal.fg} isEdit={isEdit} onUpdate={onUpdate} onBlur={onStopEdit} />}
+          {card.type === "checklist" && <CardChecklist card={card} fg={pal.fg} isEdit={isEdit} onUpdate={onUpdate} onBlur={onStopEdit} />}
+          {card.type === "image"     && <CardImage     card={card} fg={pal.fg} isEdit={isEdit} isSel={isSel} onUpdate={onUpdate} onBlur={onStopEdit} />}
         </View>
       </GestureDetector>
 

@@ -30,7 +30,7 @@ function processFile(file, currentCaption, onUpdate) {
   img.src = blobUrl;
 }
 
-export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
+export default function CardImage({ card, fg = "#78350f", isEdit, isSel, onUpdate, onBlur }) {
   const fileRef = useRef(null);
   const [draggingOver, setDraggingOver] = useState(false);
 
@@ -69,9 +69,9 @@ export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
       </View>
 
       <TextInput
-        style={styles.captionInput}
+        style={[styles.captionInput, { color: fg, borderBottomColor: fg + "26" }]}
         placeholder="Descripción (opcional)"
-        placeholderTextColor="rgba(0,0,0,0.3)"
+        placeholderTextColor={fg + "4D"}
         value={card.caption || ""}
         onChangeText={(t) => onUpdate({ caption: t })}
         onBlur={onBlur}
@@ -101,7 +101,7 @@ export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
           <Text style={styles.emptyText}>Doble click → subir imagen</Text>
         </View>
       )}
-      {card.caption ? <Text style={styles.caption}>{card.caption}</Text> : null}
+      {card.caption ? <Text style={[styles.caption, { color: fg }]}>{card.caption}</Text> : null}
     </View>
   );
 }

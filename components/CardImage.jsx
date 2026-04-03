@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 
-export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
+export default function CardImage({ card, fg = "#78350f", isEdit, isSel, onUpdate, onBlur }) {
   async function pickImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -49,9 +49,9 @@ export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
           )}
         </TouchableOpacity>
         <TextInput
-          style={styles.captionInput}
+          style={[styles.captionInput, { color: fg, borderBottomColor: fg + "26" }]}
           placeholder="Descripción (opcional)"
-          placeholderTextColor="rgba(0,0,0,0.3)"
+          placeholderTextColor={fg + "4D"}
           value={card.caption || ""}
           onChangeText={(t) => onUpdate({ caption: t })}
           onBlur={onBlur}
@@ -73,7 +73,7 @@ export default function CardImage({ card, isEdit, isSel, onUpdate, onBlur }) {
           <Text style={styles.emptyText}>Toca dos veces para subir</Text>
         </View>
       )}
-      {card.caption ? <Text style={styles.caption}>{card.caption}</Text> : null}
+      {card.caption ? <Text style={[styles.caption, { color: fg }]}>{card.caption}</Text> : null}
     </View>
   );
 }

@@ -10,9 +10,14 @@ function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
-export default function CardChecklist({ card, isEdit, onUpdate, onBlur }) {
+export default function CardChecklist({ card, fg = "#78350f", isEdit, onUpdate, onBlur }) {
   const items = card.items || [];
   const done = items.filter((i) => i.done).length;
+
+  // Semi-transparent versions of fg
+  const fgFaint = fg + "59";  // ~35% opacity
+  const fgSubtle = fg + "40"; // ~25% opacity
+  const fgGhost = fg + "1F";  // ~12% opacity
 
   function addItem() {
     onUpdate({ items: [...items, { id: uid(), text: "", done: false }] });
@@ -30,17 +35,17 @@ export default function CardChecklist({ card, isEdit, onUpdate, onBlur }) {
     <View>
       {isEdit ? (
         <TextInput
-          style={styles.titleInput}
+          style={[styles.titleInput, { color: fg, borderBottomColor: fg + "2E" }]}
           value={card.title || ""}
           onChangeText={(t) => onUpdate({ title: t })}
           placeholder="Nombre de la lista"
-          placeholderTextColor="rgba(0,0,0,0.35)"
+          placeholderTextColor={fgFaint}
         />
       ) : (
-        <Text style={styles.title}>{card.title || "Lista"}</Text>
+        <Text style={[styles.title, { color: fg }]}>{card.title || "Lista"}</Text>
       )}
 
-      <Text style={styles.counter}>
+      <Text style={[styles.counter, { color: fg }]}>
         {done}/{items.length} completados
       </Text>
 
@@ -48,22 +53,22 @@ export default function CardChecklist({ card, isEdit, onUpdate, onBlur }) {
         <View key={item.id} style={styles.row}>
           <TouchableOpacity
             onPress={() => updItem(item.id, { done: !item.done })}
-            style={[styles.checkbox, item.done && styles.checkboxDone]}
+            style={[styles.checkbox, { borderColor: fgSubtle }, item.done && styles.checkboxDone]}
           >
             {item.done && <Text style={styles.checkmark}>✓</Text>}
           </TouchableOpacity>
 
           {isEdit ? (
             <TextInput
-              style={[styles.itemInput, item.done && styles.itemDone]}
+              style={[styles.itemInput, { color: fg, borderBottomColor: fgGhost }, item.done && styles.itemDone]}
               value={item.text}
               onChangeText={(t) => updItem(item.id, { text: t })}
               placeholder="Elemento..."
-              placeholderTextColor="rgba(0,0,0,0.3)"
+              placeholderTextColor={fg + "4D"}
               onBlur={onBlur}
             />
           ) : (
-            <Text style={[styles.itemText, item.done && styles.itemDone]}>
+            <Text style={[styles.itemText, { color: fg }, item.done && styles.itemDone]}>
               {item.text || "..."}
             </Text>
           )}
@@ -73,15 +78,15 @@ export default function CardChecklist({ card, isEdit, onUpdate, onBlur }) {
               onPress={() => delItem(item.id)}
               style={styles.delBtn}
             >
-              <Text style={styles.delText}>✕</Text>
+              <Text style={[styles.delText, { color: fg }]}>✕</Text>
             </TouchableOpacity>
           )}
         </View>
       ))}
 
       {isEdit && (
-        <TouchableOpacity onPress={addItem} style={styles.addBtn}>
-          <Text style={styles.addText}>+ Agregar elemento</Text>
+        <TouchableOpacity onPress={addItem} style={[styles.addBtn, { borderColor: fg + "33" }]}>
+          <Text style={[styles.addText, { color: fg }]}>+ Agregar elemento</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -93,7 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     borderBottomWidth: 1.5,
-    borderBottomColor: "rgba(0,0,0,0.18)",
     paddingBottom: 4,
     marginBottom: 8,
   },
@@ -105,7 +109,6 @@ const styles = StyleSheet.create({
     height: 18,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: "rgba(0,0,0,0.25)",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -115,7 +118,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.12)",
   },
   itemText: { flex: 1, fontSize: 13, lineHeight: 20 },
   itemDone: { textDecorationLine: "line-through", opacity: 0.4 },
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
   addBtn: {
     borderWidth: 1.5,
     borderStyle: "dashed",
-    borderColor: "rgba(0,0,0,0.2)",
     borderRadius: 7,
     padding: 6,
     marginTop: 6,

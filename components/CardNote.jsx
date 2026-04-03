@@ -1,27 +1,30 @@
 import { Platform, StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function CardNote({ card, isEdit, onUpdate, onBlur }) {
+export default function CardNote({ card, fg = "#78350f", isEdit, onUpdate, onBlur }) {
+  // Semi-transparent versions of fg for placeholders and borders
+  const fgFaint = fg + "59"; // ~35% opacity
+  const fgSubtle = fg + "2E"; // ~18% opacity
+
   if (isEdit)
     return (
       <View {...(Platform.OS === "web" ? { onPointerDown: (e) => e.stopPropagation() } : {})}>
         <TextInput
-          style={[styles.titleInput, { color: "inherit" }]}
+          style={[styles.titleInput, { color: fg, borderBottomColor: fgSubtle }]}
           placeholder="Título (opcional)"
-          placeholderTextColor="rgba(0,0,0,0.35)"
+          placeholderTextColor={fgFaint}
           value={card.title || ""}
           onChangeText={(t) => onUpdate({ title: t })}
-          autoFocus // ← muévelo aquí
-          returnKeyType="next" // ← bonus: teclado muestra "siguiente"
-          onSubmitEditing={() => {}} // ← al presionar enter no cierra el teclado
+          autoFocus
+          returnKeyType="next"
+          onSubmitEditing={() => {}}
         />
         <TextInput
-          style={[styles.bodyInput, { color: "inherit" }]}
+          style={[styles.bodyInput, { color: fg }]}
           placeholder="Escribe tu idea aquí..."
-          placeholderTextColor="rgba(0,0,0,0.35)"
+          placeholderTextColor={fgFaint}
           value={card.body || ""}
           onChangeText={(t) => onUpdate({ body: t })}
           multiline
-          // ← quita el autoFocus de aquí
           onBlur={onBlur}
         />
       </View>
@@ -29,8 +32,8 @@ export default function CardNote({ card, isEdit, onUpdate, onBlur }) {
 
   return (
     <View>
-      {card.title ? <Text style={styles.title}>{card.title}</Text> : null}
-      <Text style={[styles.body, { opacity: card.body ? 1 : 0.35 }]}>
+      {card.title ? <Text style={[styles.title, { color: fg }]}>{card.title}</Text> : null}
+      <Text style={[styles.body, { color: fg, opacity: card.body ? 1 : 0.35 }]}>
         {card.body || "Toca para editar..."}
       </Text>
     </View>
@@ -42,7 +45,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     borderBottomWidth: 1.5,
-    borderBottomColor: "rgba(0,0,0,0.18)",
     paddingBottom: 4,
     marginBottom: 10,
   },
